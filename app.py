@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 app = Flask(__name__)
 
 @app.route('/')
@@ -13,9 +13,17 @@ def return_version():
 def select_relay():
     return('SelectRelay')
 
-@app.route('/relay<number>')
+@app.route('/relay<int:number>')
 def set_relay(number):
-    return('relay'+str(number))
+    state = request.args.get('state')
+    return('relay- '+str(number)+ "   -   "+str(state))
 
 if __name__ == '__main__':
    app.run(debug = True, port=5000, host='0.0.0.0')
+
+   from flask import request
+
+@app.route(...)
+def login():
+    
+    password = request.args.get('password')
