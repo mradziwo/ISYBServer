@@ -15,7 +15,7 @@ def select_relay():
 
 @app.route('/relay<int:number>')
 def set_relay(number):
-    state = lower(str(request.args.get('state')))
+    state = str(request.args.get('state')).lower()
     if state == None:
         return('relay'+str(number)+ "   -state report   ")
     if (state=="on")|(state=="true")|(state=="set")|(state=="set")|(state=="1"):
