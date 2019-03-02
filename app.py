@@ -16,13 +16,17 @@ def select_relay():
 @app.route('/relay<int:number>')
 def set_relay(number):
     state = str(request.args.get('state')).lower()
+    setting=None
     if state == "none":
         return('relay'+str(number)+ "   -state report   ")
-    if (state=="on")|(state=="true")|(state=="set")|(state=="set")|(state=="1"):
-        setting=1
-    else:
+    if (state=="off")|(state=="false")|(state=="clear")|(state=="reset")|(state=="0")|(state=="low"):
         setting=0
-    return('relay- '+str(number)+ "   -   "+str(setting))
+    elif (state=="on")|(state=="true")|(state=="set")|(state=="1")|(state=="high"):
+        setting=1
+    if setting!=None:
+        return('relay- '+str(number)+ "   -   "+str(setting))
+    else:
+        return('relay- unknown command')
 
 if __name__ == '__main__':
    app.run(debug = True, port=5000, host='0.0.0.0')
