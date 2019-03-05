@@ -67,7 +67,9 @@ class Connections():
 @app.route('/availableSerialPorts')
 def availableSerialPorts():
     asp=list_ports.comports()
+    reply=""
     for serialPort in asp:
+        reply=reply+str(serialPort)+" VID: "+str(serialPort.vid)+" PID: "+str(serialPort.pid)+"<br>"
          
 
 @app.route('/')
