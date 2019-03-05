@@ -70,6 +70,7 @@ def availableSerialPorts():
     reply=""
     for serialPort in asp:
         reply=reply+str(serialPort)+" VID: "+str(serialPort.vid)+" PID: "+str(serialPort.pid)+"<br>"
+    return(reply)
          
 
 @app.route('/')
