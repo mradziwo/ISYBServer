@@ -1,13 +1,82 @@
 from flask import Flask, request
+import serial
+from serial.tools import list_ports
 app = Flask(__name__)
 
+class Connections():
+    ISWYBsetialDescriptor=None
+    ISWYBserial=None
+    PowerSerialDescriptor=None
+    PowerSerial=None
+
+    def connectISWYB(self):
+        try:
+            self.ISWYBserial=serial.serial(ISWYBsetialDescriptor)
+            return(True)
+        except:
+            self.ISWYBserial=None
+            return(False)
+        pass
+
+    def connectPower(self):
+        try:
+            self.PowerSerial=serial.serial(PowerSerialDescriptor)
+            return(True)
+        except:
+            self.PowerSerial=None
+            return(False)
+        pass
+    
+    def writeISWYB(self, payload):
+        if self.ISWYBserial==None:
+            slelf.connectISWYB()
+            if self.ISWYBserial is None:
+                return(False)
+        try:
+            self.ISWYBserial.write(payload)
+            return(True)
+        except:
+            self.ISWYBserial.close()
+            self.ISWYBserial=None
+            return(False)
+
+    def writePower(self, payload):     
+        if self.PowerSerial==None:
+            slelf.connectPower()
+            if self.ISWYBserial is None:
+                return(False)
+        try:
+            self.PowerSerial.write(payload)
+            return(True)
+        except:
+            self.PowerSerial.close()
+            self.PowerSerial=None   
+            return(False)
+
+    def readPower(self, n):     
+        if self.PowerSerial==None:
+            slelf.connectPower()
+        try:
+            payload=self.PowerSerial.read(n)
+            return(True,payload)
+        except:
+            self.PowerSerial.close()
+            self.PowerSerial=None   
+            return(False, b'')
+
+@app.route('/availableSerialPorts')
+def availableSerialPorts():
+    asp=list_ports.comports()
+    for serialPort in asp:
+         
+
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def status():
+    return ('ISWYB '+ str(Connections.ISWYBserial) + '<br> Power'+str(Connections.PowerSerial))
 
 @app.route('/version')
 def return_version():
-    return('0.0.1')
+    return('0.0.2')
 
 @app.route('/sel')
 def select_relay():
@@ -30,5 +99,3 @@ def set_relay(number):
 
 if __name__ == '__main__':
    app.run(debug = True, port=5000, host='0.0.0.0')
-
-   from flask import request
